@@ -1,0 +1,310 @@
+@prefix : <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.dit475.chalmers/Group8/assignment-2> .
+
+<http://www.dit475.chalmers/Group8/assignment-2> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.dit475.chalmers/Group8/assignment-2#CourseBelongsDiv
+:CourseBelongsDiv rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Course ;
+                  rdfs:range :Devision .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#CourseInstanceOf
+:CourseInstanceOf rdf:type owl:ObjectProperty ;
+                  rdfs:domain :CourseInstanse ;
+                  rdfs:range :Course .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Director
+:Director rdf:type owl:ObjectProperty ;
+          rdfs:domain :Program ;
+          rdfs:range :SeniorTeacher .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Examiner
+:Examiner rdf:type owl:ObjectProperty ;
+          rdfs:domain :CourseInstanse ;
+          rdfs:range :SeniorTeacher .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Hosts
+:Hosts rdf:type owl:ObjectProperty ;
+       rdfs:domain :Program ;
+       rdfs:range :Department .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#ProgOwnsCourse
+:ProgOwnsCourse rdf:type owl:ObjectProperty ;
+                rdfs:domain :Course ;
+                rdfs:range :Program .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#StdBlongsProgram
+:StdBlongsProgram rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Student ;
+                  rdfs:range :ProgramInstance .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#TeachBelongsDiv
+:TeachBelongsDiv rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Teacher ;
+                 rdfs:range :Devision .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.dit475.chalmers/Group8/assignment-2#CourseInstID
+:CourseInstID rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :CourseInstanse ;
+              rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#RegistrationYear
+:RegistrationYear rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :Student ;
+                  rdfs:range xsd:dateTime .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#abbr
+:abbr rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Department ;
+      rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#academicYearCourIn
+:academicYearCourIn rdf:type owl:DatatypeProperty ;
+                    rdfs:domain :CourseInstanse ;
+                    rdfs:range xsd:dateTime .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#academicYearProgIn
+:academicYearProgIn rdf:type owl:DatatypeProperty ,
+                             owl:FunctionalProperty ;
+                    rdfs:domain :ProgramInstance ;
+                    rdfs:range xsd:dateTime .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#assignedHours
+:assignedHours rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Assignment ;
+               rdfs:range xsd:float .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#assistantHours
+:assistantHours rdf:type owl:DatatypeProperty ;
+                rdfs:domain :CourseInstanse ;
+                rdfs:range xsd:integer .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#courseCode
+:courseCode rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :Course ;
+            rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#courseName
+:courseName rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Course ;
+            rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#courseType
+:courseType rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :ProgramCourse ;
+            rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#credits
+:credits rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Course ;
+         rdfs:range xsd:float .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#departmentName
+:departmentName rdf:type owl:DatatypeProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain :Department ;
+                rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#divisionName
+:divisionName rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Devision ;
+              rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#full-time
+:full-time rdf:type owl:DatatypeProperty ;
+           rdfs:domain :TeachingAssistant ;
+           rdfs:range xsd:boolean .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#grade
+:grade rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Registration ;
+       rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#graduated
+:graduated rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Student ;
+           rdfs:range xsd:boolean .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#level
+:level rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Course ;
+       rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#personID
+:personID rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :Person ;
+          rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#personName
+:personName rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Person ;
+            rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#planningNumStud
+:planningNumStud rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :CourseInstanse ;
+                 rdfs:range xsd:integer .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#programCode
+:programCode rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Program ;
+             rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#programName
+:programName rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Program ;
+             rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#reportedHours
+:reportedHours rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Assignment ;
+               rdfs:range xsd:float .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#seniorHours
+:seniorHours rdf:type owl:DatatypeProperty ;
+             rdfs:domain :CourseInstanse ;
+             rdfs:range xsd:integer .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#status
+:status rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Registration ;
+        rdfs:range xsd:string .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#studyPeriod
+:studyPeriod rdf:type owl:DatatypeProperty ;
+             rdfs:domain :CourseInstanse ;
+             rdfs:range xsd:integer .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#studyYear
+:studyYear rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain :ProgramCourse ;
+           rdfs:range xsd:dateTime .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Assignment
+:Assignment rdf:type owl:Class ;
+            rdfs:subClassOf :CourseInstanse ,
+                            :Teacher .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Course
+:Course rdf:type owl:Class .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#CourseInstanse
+:CourseInstanse rdf:type owl:Class .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Department
+:Department rdf:type owl:Class .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Devision
+:Devision rdf:type owl:Class ;
+          rdfs:subClassOf :Department .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Person
+:Person rdf:type owl:Class .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Program
+:Program rdf:type owl:Class .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#ProgramCourse
+:ProgramCourse rdf:type owl:Class ;
+               rdfs:subClassOf :Course ,
+                               :ProgramInstance .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#ProgramInstance
+:ProgramInstance rdf:type owl:Class ;
+                 rdfs:subClassOf :Program .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Registration
+:Registration rdf:type owl:Class ;
+              rdfs:subClassOf :CourseInstanse ,
+                              :Student .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#SeniorTeacher
+:SeniorTeacher rdf:type owl:Class ;
+               rdfs:subClassOf :Teacher .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Student
+:Student rdf:type owl:Class ;
+         rdfs:subClassOf :Person .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#Teacher
+:Teacher rdf:type owl:Class ;
+         rdfs:subClassOf :Person .
+
+
+###  http://www.dit475.chalmers/Group8/assignment-2#TeachingAssistant
+:TeachingAssistant rdf:type owl:Class ;
+                   rdfs:subClassOf :Teacher .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

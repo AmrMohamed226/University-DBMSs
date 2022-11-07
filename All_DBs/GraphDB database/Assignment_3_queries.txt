@@ -1,0 +1,76 @@
+Assignment 3:
+
+1) 
+
+PREFIX : <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+
+SELECT DISTINCT ?name ?director ?department
+WHERE {
+?program :programName ?name .
+?program :Director ?director .
+?program :departmentName ?department .
+}
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+2)
+PREFIX : <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?name
+WHERE {
+?id rdf:type :TeachingAssistant.
+?id :personName ?name.
+?id :courseCode ?CI.
+?CI :CourseInstanceOf  ?course.
+?course :CourseBelongsDiv :D3-2.
+?CI :studyPeriod :2.0.
+?CI :academicYearCourIn :2023-2024.
+}
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+3) 
+
+PREFIX : <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+PREFIX uri: <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?name
+WHERE {
+?id rdf:type ?teacher.
+    Filter(?teacher in (:TeachingAssistant,:SeniorTeacher))
+?id :personName ?name.
+?id :assignedHours	 ?hours.
+?id :courseCode :1011.
+?id :studyPeriod :1.0.
+?id :academicYearCourIn :2018-2019.
+    FILTER( ?hours > 120.0)
+}
+
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+4)
+
+
+PREFIX :<http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+PREFIX uri: <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+SELECT  ?RegisteredStud
+WHERE {
+?RegisteredStud :CourseInstID ?CI 
+FILTER (?CI =uri:I-910 ).
+FILTER 
+    (NOT EXISTS{?RegisteredStud :CourseInstID uri:I-911}).
+  } 
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+
+5) 
+
+PREFIX : <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+PREFIX uri: <http://www.semanticweb.org/keyha/ontologies/2022/3/untitled-ontology-11#>
+SELECT ?progCode (COUNT(?courCode) AS ?count)
+WHERE {
+?courCode :ProgOwnsCourse ?progCode.
+}
+GROUP BY ?progCode
+ORDER BY DESC(?count)

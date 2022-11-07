@@ -1,0 +1,128 @@
+//ORDER of data importing has to be followed
+
+LOAD CSV WITH HEADERS FROM 'file:///Teaching_Assistants.csv' AS row1 
+MERGE (TA:Teaching_Assistant {
+        personID: row1.`Teacher id`,
+        personName: row1.`Teacher name`})
+MERGE (D:Division {divisionName: row1.`Division name`,
+                  departmentName: row1.`Department name`})
+MERGE (TA)-[:TeachBelongsDiv]->(D)
+MERGE (TA) -[:subClassOf]->(T:Teacher {personID: row1.`Teacher id`});
+
+LOAD CSV WITH HEADERS FROM 'file:///Senior_Teachers.csv' AS row1 
+MERGE (ST:SeniorTeacher {
+        personID: row1.`Teacher id`,
+        personName: row1.`Teacher name`})
+MERGE (D:Division {divisionName: row1.`Division name`,
+        departmentName: row1.`Department name`})
+MERGE (ST)-[:TeachBelongsDiv]->(D)
+MERGE (ST) -[:subClassOf]->(T:Teacher {personID: row1.`Teacher id`});
+
+LOAD CSV WITH HEADERS FROM 'file:///Programmes.csv' AS row1 
+MERGE (P:Programme {
+    programName: row1.`Programme name`,
+    programCode: row1.`Programme code`,
+    departmentName: row1.`Department name`})
+MERGE(S:SeniorTeacher{personID: row1.`Director`})
+MERGE(P) -[:hasDirector]-> (S);
+
+LOAD CSV WITH HEADERS FROM 'file:///Courses.csv' AS row1 
+MERGE (C:Course {
+    courseName: row1.`Course name`,
+    courseCode: row1.`Course code`,
+    credits: toFloat(row1.`Credits`),
+    level: row1.`Level`,
+    departmentName: row1.`Department`,
+    divisionName: row1.`Division`})
+MERGE (P:Programme {programName: row1.`Owned By`})
+MERGE (P)-[:ProgOwnsCourse]->(C);
+
+LOAD CSV WITH HEADERS FROM 'file:///Programme_Courses.csv' AS row1 
+MERGE (PC:Programme_Course {
+    courseType: row1.`Course Type`,
+    academicYearProgIn: row1.`Academic Year`,
+    studyYear: row1.`Study Year`})
+MERGE(P:Programme {programCode: row1.`Programme code`})
+MERGE (C:Course {courseCode: row1.`Course`})
+MERGE (PC)-[:ProgCofP]->(P)
+MERGE (PC)-[:ProgCofC]->(C);
+
+LOAD CSV WITH HEADERS FROM 'file:///Students.csv' AS row1 
+MERGE (S:Student {
+    personName: row1.`Student name`,
+    personID: row1.`Student id`,
+    RegistrationYear: row1.`Year`,
+    graduated: toBoolean(row1.`Graduated`)})
+MERGE (S) -[:StdBlongsProgram]->(P:Programme {programCode: row1.`Programme`})
+MERGE (S) -[:subClassOf]->(:Person);
+
+LOAD CSV WITH HEADERS FROM 'file:///Course_Instances.csv' AS row1 
+MERGE (CI:Course_Instance {
+    CourseInstID: row1.`Instance_id`,
+    studyPeriod: row1.`Study period`,
+    academicYearCourIn: row1.`Academic year`})
+MERGE (S:SeniorTeacher {personID: row1.`Examiner`})
+MERGE (C:Course{courseCode: row1.`Course code`})
+MERGE (CI) -[:instanceOf]->(C)
+MERGE (CI) -[:Examiner]->(S);
+
+LOAD CSV WITH HEADERS FROM 'file:///Course_plannings.csv' AS row1 
+MERGE (CP:CoursePlanning 
+{planningNumStd:toInteger(row1.`Planned number of Students`),
+seniorHours:toFloat(row1.`Senior Hours`),
+assistantHours:toFloat(row1.`Assistant Hours`)})
+MERGE (CI:Course_Instance {CourseInstID:row1.`Course`})
+MERGE (CP)-[:PlanningOf]->(CI);
+
+LOAD CSV WITH HEADERS FROM 'file:///Assigned_Hours.csv' AS row1 
+MERGE (T:Teacher {personID:row1.`Teacher Id`})
+MERGE (CI:Course_Instance {CourseInstID:row1.`Course code`,
+ studyPeriod: row1.`Study Period` ,
+ academicYearCourIn: row1.`Academic Year`})
+MERGE (T)-[:assignedHours {hours:toFloat(row1.`Hours`)}]->(CI);
+
+LOAD CSV WITH HEADERS FROM 'file:///Reported_Hours.csv' AS row1 
+MERGE (T:Teacher {personID:row1.`Teacher Id`})
+MERGE (CI:Course_Instance {CourseInstID:row1.`Course code`})
+MERGE (T)-[:reportedHours{hours:toFloat(row1.`Hours`)}]->(CI);
+
+LOAD CSV WITH HEADERS FROM 'file:///Registrations.csv' AS row1 
+MERGE (S:Student {personID:row1.`Student id`})
+MERGE (CI:Course_Instance{CourseInstID: row1.`Course Instance`})
+MERGE (S)-[:registeredIn {status: row1.`Status`, grade:coalesce(row1.`Grade`,'')}]->(CI);
+
+
+// Query 1
+MATCH (P:Programme)-[r:hasDirector]-(D:SeniorTeacher)
+RETURN  P,D;
+
+// Query 2
+MATCH (T:Teacher),(TA:Teaching_Assistant)
+MATCH (CI:Course_Instance {academicYearCourIn:'2023-2024',studyPeriod:'2.0'})
+MATCH (C:Course {divisionName:'D3-2'})
+MATCH (CI)-[:instanceOf]-(C)
+MATCH (T)-[:reportedHours]->(CI)
+MATCH (TA)-[:subClassOf]-(T)
+RETURN TA,T,CI;
+// Query 3
+MATCH (T:Teacher)-[AH:assignedHoursCourse]-(C:Course{courseCode:'1011'})
+MATCH (CI:Course_Instance{ studyPeriod:'1.0',academicYearCourIn:"2018-2019"})-[:instanceOf]-(C)
+WHERE AH.hours > 120
+RETURN DISTINCT T,C,CI
+// Query 4
+MATCH (S:Student)-[:registeredIn]-(CI:Course_Instance {CourseInstID:'I-910'})
+WHERE NOT EXISTS ((S)-[:registeredIn]-(:Course_Instance {CourseInstID:'I-911'}))
+RETURN DISTINCT S,CI;
+
+// Query 5
+MATCH (C:Course) -[:ProgOwnsCourse]-(P:Programme)
+RETURN P.programName, COUNT(C) ORDER BY COUNT(C) DESC;
+
+// Query 6
+//Senior Teachers
+MATCH (ST:SeniorTeacher)
+RETURN count(DISTINCT ST.personID) as STCount;
+
+//All people
+MATCH (n)
+RETURN count(DISTINCT n.personID) as Count;
